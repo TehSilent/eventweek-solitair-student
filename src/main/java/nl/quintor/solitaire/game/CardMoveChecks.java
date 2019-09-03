@@ -30,7 +30,11 @@ public class CardMoveChecks {
      * @throws MoveException on syntax error
      */
     public static void checkPlayerInput(String[] input) throws MoveException{
-        // TODO: Write implementation
+        if(input[1] == "Z"){
+            throw new MoveException("Invalid Move syntax. \"Z\" is not a valid source location.\nSee H̲elp for instructions.");
+        }else if(input[2] == "Z"){
+            throw new MoveException("Invalid Move syntax. \"Z\" is not a valid destination location.\nSee H̲elp for instructions.");
+        }
     }
 
     /**
@@ -103,8 +107,6 @@ public class CardMoveChecks {
         }
     }
 
-
-
     // Helper methods
 
     /**
@@ -113,7 +115,7 @@ public class CardMoveChecks {
      * @param r Rank to be converted
      * @return Converted rank
      */
-    private static int rankToInt(Rank r){
+    static int rankToInt(Rank r){
         int i = 0;
 
         switch (r) {

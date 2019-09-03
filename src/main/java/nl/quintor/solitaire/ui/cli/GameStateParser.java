@@ -68,8 +68,11 @@ class GameStateParser {
      * @return the requested card or null
      */
     protected static String getCardStringOrNull(Deck deck, int index){
-        // TODO: Write implementation
-        return null;
+        if(deck == null || deck.size()<=index){
+            return null;
+        }
+
+        return deck.get(index).toString();
     }
 
     /**
