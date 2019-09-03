@@ -82,5 +82,19 @@ class GameStateParser {
      */
     protected static void padNAdd(StringBuilder builder, String string, int totalLength){
         // TODO: Write implementation
+        if(string.length() == 1){
+            string = " " + string;
+            builder.append(string);
+            for (int i=0 ; i<totalLength - string.length() ; i++){
+                builder.append(" ");
+            }
+        }
+
+        else{
+            builder.append(string);
+            for (int i=0 ; i<totalLength - string.length() ; i++){
+                builder.append(" ");
+            }
+        }
     }
 }
