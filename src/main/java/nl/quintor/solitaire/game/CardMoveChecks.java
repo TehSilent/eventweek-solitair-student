@@ -45,7 +45,28 @@ public class CardMoveChecks {
      * @throws MoveException on illegal move
      */
     public static void deckLevelChecks(Deck sourceDeck, int sourceCardIndex, Deck destinationDeck) throws MoveException {
-        // TODO: Write implementation
+        if(sourceDeck == destinationDeck){
+            throw new MoveException("Move source and destination can't be the same");
+        }
+
+        var sourceType = sourceDeck.getDeckType();
+        var destinationType = destinationDeck.getDeckType();
+
+        if(sourceDeck.size() == 0){
+            throw new MoveException("You can\'t move a card from an empty deck");
+        }
+
+        if(destinationType == DeckType.STOCK){
+            throw new MoveException("You can\'t move cards to the stock");
+        }
+
+        if(sourceDeck.size()-sourceDeck.getInvisibleCards() < sourceDeck.size()-sourceCardIndex){
+            throw new MoveException("You can\'t move an invisible card");
+        }
+
+        if(sourceCardIndex < sourceDeck.size()-1 && destinationType == DeckType.STACK){
+            throw new MoveException("You can\'t move more than 1 card at a time to a Stack Pile");
+        }
     }
 
     /**
@@ -94,8 +115,7 @@ public class CardMoveChecks {
      * @return true if the cards are of different colors
      */
     static boolean opposingColor(Card card1, Card card2){
-        // TODO: Write implementation
-        return true;
+        return redSuit(card1) != redSuit(card2);
     }
 
     /**
