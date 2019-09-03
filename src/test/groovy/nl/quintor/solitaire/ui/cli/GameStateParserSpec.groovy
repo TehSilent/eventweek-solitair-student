@@ -21,9 +21,9 @@ class GameStateParserSpec extends Specification {
             builder.toString() == expectedResult
         where:
             stringToPad | expectedResult        || testCase
-            ''          | '                    '|| "pad string of lenght of 0"
-            'a'         | ' a                  '|| "pad string of lenght of 1"
-            'abc'       | 'abc                 '|| "pad string of lenght greater then 1"
+            ''          | '                    '|| "pad string of length of 0"
+            'a'         | ' a                  '|| "pad string of length of 1"
+            'abc'       | 'abc                 '|| "pad string of length greater then 1"
     }
 
     @Unroll
