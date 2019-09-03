@@ -80,10 +80,86 @@ public class CardMoveChecks {
      * @throws MoveException on illegal move
      */
     public static void cardLevelChecks(Deck targetDeck, Card cardToAdd) throws MoveException {
-        // TODO: Write implementation
+        var targetType = targetDeck.getDeckType();
+
+        if(targetType == DeckType.STACK){
+
+            if(targetDeck.size() == 0){
+                checkStackMove(null,cardToAdd);
+            }else{
+                checkStackMove(targetDeck.get(targetDeck.size()-1),cardToAdd);
+            }
+
+        }else if(targetType == DeckType.COLUMN) {
+
+            if(targetDeck.size()==0){
+                checkColumnMove(null,cardToAdd);
+            }else{
+                checkColumnMove(targetDeck.get(targetDeck.size()-1),cardToAdd);
+            }
+
+        }else{
+            throw new MoveException("Target deck is neither Stack nor Column.");
+        }
     }
 
+
+
     // Helper methods
+
+    /**
+     * Converts rank to an int for easy comparison
+     *
+     * @param r Rank to be converted
+     * @return Converted rank
+     */
+    private static int rankToInt(Rank r){
+        int i = 0;
+
+        switch (r) {
+            case ACE:
+                i = 0;
+                break;
+            case TWO:
+                i = 1;
+                break;
+            case THREE:
+                i = 2;
+                break;
+            case FOUR:
+                i = 3;
+                break;
+            case FIVE:
+                i = 4;
+                break;
+            case SIX:
+                i = 5;
+                break;
+            case SEVEN:
+                i = 6;
+                break;
+            case EIGHT:
+                i = 7;
+                break;
+            case NINE:
+                i = 8;
+                break;
+            case TEN:
+                i = 9;
+                break;
+            case JACK:
+                i = 10;
+                break;
+            case QUEEN:
+                i = 11;
+                break;
+            case KING:
+                i = 12;
+                break;
+        }
+
+        return i;
+    }
 
     /**
      * Verifies that the proposed move is legal given that the targetCard is the top of a stack pile.
@@ -93,7 +169,19 @@ public class CardMoveChecks {
      * @throws MoveException on illegal move
      */
     static void checkStackMove(Card targetCard, Card cardToAdd) throws MoveException {
-        // TODO: Write implementation
+        if(targetCard == null){
+            if(cardToAdd.getRank() != Rank.ACE){
+                throw new MoveException("An Ace has to be the first card of a Stack Pile");
+            }
+        }else{
+            if(rankToInt(targetCard.getRank()) + 1 != rankToInt(cardToAdd.getRank())){
+                throw new MoveException("Stack Piles hold same-suit cards of increasing Rank from Ace to King");
+            }else{
+                if(targetCard.getSuit() != cardToAdd.getSuit()){
+                    throw new MoveException("Stack Piles can only contain same-suit cards");
+                }
+            }
+        }
     }
 
     /**
@@ -104,7 +192,17 @@ public class CardMoveChecks {
      * @throws MoveException on illegal move
      */
     static void checkColumnMove(Card targetCard, Card cardToAdd) throws MoveException {
-        /// TODO: Write implementation
+        if (targetCard == null) {
+            if(cardToAdd.getRank() != Rank.KING){
+                throw new MoveException("A King has to be the first card of a Column");
+            }
+        }else if(!opposingColor(targetCard,cardToAdd)){
+            throw new MoveException("Column cards have te alternate colors (red and black)");
+        }else{
+            if(rankToInt(targetCard.getRank()) != rankToInt(cardToAdd.getRank()) + 1){
+                throw new MoveException("Columns hold alternating-color cards of decreasing rank from King to Two");
+            }
+        }
     }
 
     /**
