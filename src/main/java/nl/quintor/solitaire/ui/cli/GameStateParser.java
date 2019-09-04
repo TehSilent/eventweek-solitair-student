@@ -40,8 +40,81 @@ class GameStateParser {
      *  @return a visual representation of the gameState (for monospace terminal printing)
      */
     static String parseGameState(GameState gameState){
-        // TODO: Write implementation
-        return "";
+        StringBuilder builder = new StringBuilder();
+
+        // moves play time pointz
+        var moves = Integer.toString(gameState.getMoves().size());
+        var time = gameState.getEndTime();
+        var timeScore = Integer.toString(time.getHour()) + ":" + Integer.toString(time.getMinute()) + ":" + Integer.toString(time.getSecond());
+        var score = Long.toString(gameState.getScore());
+
+        builder.append(" " + moves + " moves played in " + timeScore + " for " + score + "points\n");
+
+        //space
+        builder.append("\n");
+
+        //O and stack names
+        padNAdd(builder,"",3);
+        padNAdd(builder,"O (" + Integer.toString(gameState.getWaste().size()) + ")",24);
+        padNAdd(builder,"SA",8);
+        padNAdd(builder,"SB",8);
+        padNAdd(builder,"SC",8);
+        padNAdd(builder,"SD",2);
+        builder.append("\n");
+
+        //stock stacks
+
+        padNAdd(builder,"",3);
+        var stock = gameState.getStock();
+        padNAdd(builder,getCardStringOrNull(stock,stock.size()-1),24);
+
+        var stacks = gameState.getStackPiles();
+        String[] stackNames = {"SA","SB","SC","SD"};
+        for(int stack = 0; stack < stacks.size();stack++){
+            var deck = stacks.get(stackNames[stack]);
+
+            String cardString = getCardStringOrNull(deck,deck.size()-1);
+
+            if(cardString == null){
+
+                cardString = "_ _";
+
+            }
+
+            padNAdd(builder,cardString,stack==stacks.size()-1?2:8);
+
+        }
+        builder.append("\n");
+
+        //space
+        builder.append("\n");
+
+        //column names
+        padNAdd(builder,"",3);
+
+        String[] columnNames = {"A","B","C","D","E","F","G"};
+        for(var a : columnNames){
+            padNAdd(builder,a,8);
+        }
+        builder.append("\n");
+
+        //columns with row nrs
+        int row = 0;
+        int max = 0;
+        var columns = gameState.getColumns();
+        while(row <= max) {
+            padNAdd(builder, Integer.toString(row), 3);
+            for (var a : columnNames) {
+                if (columns.get(a).size() > max) {
+                    max = columns.get(a).size();
+                }
+            }
+            printRow(builder, columns.values(), row);
+            builder.append("\n");
+            row++;
+        }
+
+        return builder.toString();
     }
 
     /**
@@ -73,7 +146,7 @@ class GameStateParser {
 
             if(s == null){
                 s = "";
-            }else if(c.getInvisibleCards()>=row){
+            }else if(c.getInvisibleCards()>row){
                 s = "? ?";
             }
 
@@ -95,7 +168,7 @@ class GameStateParser {
      * @return the requested card or null
      */
     protected static String getCardStringOrNull(Deck deck, int index){
-        if(deck == null || deck.size()<=index){
+        if(deck == null || deck.size()<=index || index < 0){
             return null;
         }
 

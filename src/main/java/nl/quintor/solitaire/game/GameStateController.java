@@ -29,8 +29,7 @@ public class GameStateController {
 
         //Create a default deck with all 52 cards (no jokers)
         List<Card> allCards = new ArrayList<Card>();
-
-        for (int suit = 0; suit < 3; suit++) {
+        for (int suit = 0; suit < 4; suit++) {
             Suit s = Suit.CLUBS;
             switch (suit) {
                 case 0:
@@ -109,7 +108,7 @@ public class GameStateController {
             Deck c = new Deck();
             c.setInvisibleCards(column);
             for(int card = 0; card < column+1;card++){
-                c.add(allCards.get(cardIndex));
+                c.add(card,allCards.get(cardIndex));
                 cardIndex++;
             }
             state.getColumns().put(a,c);
@@ -117,19 +116,24 @@ public class GameStateController {
         }
 
         //create stock
-        state.getStock().set(0,allCards.get(cardIndex));
+        state.getStock().add(0,allCards.get(cardIndex));
         cardIndex++;
 
         //create waste
         for (int w = 0 ; w < allCards.size()-cardIndex ; w++){
-            state.getWaste().set(w,allCards.get(cardIndex+w));
+            state.getWaste().add(w,allCards.get(cardIndex+w));
         }
 
         //Create stack
-        String[] arrr = {"A","B","C","D"};
+        String[] arrr = {"SA","SB","SC","SD"};
         for (var a: arrr ) {
             state.getStackPiles().put(a,new Deck());
         }
+
+        for (var c : allCards ) {
+            state.getWaste().add(c);
+        }
+
 
         //return the state
         return state;
@@ -140,8 +144,8 @@ public class GameStateController {
 
         for(int i = 0; i < iterations;i++){
 
-            var ind1 = r.nextInt(52);
-            var ind2 = r.nextInt(52);
+            var ind1 = r.nextInt(deck.size());
+            var ind2 = r.nextInt(deck.size());
 
             Card c = deck.get(ind1);
             deck.set(ind1,deck.get(ind2));
