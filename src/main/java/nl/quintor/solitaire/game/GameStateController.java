@@ -166,7 +166,7 @@ public class GameStateController {
         // TODO: Write implementation
         LocalDateTime startTime = gameState.getStartTime();
         LocalDateTime endTime = gameState.getEndTime();
-        Duration duration = Duration.between(endTime, startTime);
+        Duration duration = Duration.between(startTime, endTime);
         int totalTime = (int)duration.getSeconds();
         int timePenalty = totalTime / 10 * -2;
         gameState.setTimeScore(gameState.getTimeScore() + timePenalty);
@@ -184,7 +184,7 @@ public class GameStateController {
         // TODO: Write implementation
         LocalDateTime startTime = gameState.getStartTime();
         LocalDateTime endTime = gameState.getEndTime();
-        Duration duration = Duration.between(endTime, startTime);
+        Duration duration = Duration.between(startTime, endTime);
         int totalTime = (int)duration.getSeconds();
         int bonus;
 
