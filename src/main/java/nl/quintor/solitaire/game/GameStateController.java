@@ -160,6 +160,14 @@ public class GameStateController {
      */
     public static void applyTimePenalty(GameState gameState){
         // TODO: Write implementation
+        LocalDateTime startTime = gameState.getStartTime();
+        LocalDateTime endTime = gameState.getEndTime();
+        Duration duration = Duration.between(endTime, startTime);
+        int totalTime = (int)duration.getSeconds();
+        int timePenalty = totalTime / 10 * -2;
+        gameState.setTimeScore(gameState.getTimeScore() + timePenalty);
+
+        return;
     }
 
     /**
@@ -170,6 +178,22 @@ public class GameStateController {
      */
     public static void applyBonusScore(GameState gameState){
         // TODO: Write implementation
+        LocalDateTime startTime = gameState.getStartTime();
+        LocalDateTime endTime = gameState.getEndTime();
+        Duration duration = Duration.between(endTime, startTime);
+        int totalTime = (int)duration.getSeconds();
+        int bonus;
+
+        if (totalTime > 30){
+            bonus = 700000 / totalTime;
+            gameState.setTimeScore(gameState.getTimeScore() + bonus);
+
+            return;
+        }
+
+        else {
+            return;
+        }
     }
 
     /**
