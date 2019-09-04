@@ -56,8 +56,35 @@ class GameStateParser {
      * @return did the row contain any cards
      */
     protected static boolean printRow(StringBuilder builder, Collection<Deck> columns, int row){
-        // TODO: Write implementation
-        return true;
+
+        boolean notAllNull = false;
+        int maxSize = 0;
+
+        for (var c : columns){
+            if(maxSize <= c.size()){
+                maxSize = c.size();
+            }
+
+            if(c.size() != 0) {
+                notAllNull = true;
+            }
+
+            String s = getCardStringOrNull(c,row);
+
+            if(s == null){
+                s = "";
+            }else if(c.getInvisibleCards()>=row){
+                s = "? ?";
+            }
+
+            padNAdd(builder,s,8);
+        }
+
+        if(maxSize < row){
+            return false;
+        }
+
+        return notAllNull;
     }
 
     /**
@@ -72,7 +99,7 @@ class GameStateParser {
             return null;
         }
 
-        return deck.get(index).toString();
+        return deck.get(index).toShortString();
     }
 
     /**

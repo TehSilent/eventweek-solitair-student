@@ -35,7 +35,7 @@ class GameStateParserSpec extends Specification {
             inputDeck | index |  expectedResult || testCase
             new Deck()|0|null|| 'Should return null when input deck is empty'
             new Deck()|99|null|| 'Should return null when index is invalid'
-            TestUtil.createTestDeckWithCards([new Card(Suit.HEARTS, Rank.KING), new Card(Suit.DIAMONDS, Rank.THREE)])|1|'♦ 3'|'Should return ♦ 3 whith valid index pointing to card'
+            TestUtil.createTestDeckWithCards([new Card(Suit.HEARTS, Rank.KING), new Card(Suit.DIAMONDS, Rank.THREE)])|1|'♦ 3'|'Should return ♦ 3 with valid index pointing to card'
     }
 
     @Unroll
@@ -49,9 +49,9 @@ class GameStateParserSpec extends Specification {
         where:
             inputDecks | rowIndex || expectedResult |expectedBuilderContent | testCase
             TestUtil.createTestColumnsCollections(0)|0||false|'                                                        '|'printing empty decks'
-            TestUtil.createTestColumnsCollections(1)|0||true |'♤ A     ♤ K     ♤ Q     ♤ J     ♤ 10    ♤ 9     ♤ 8     '|'printing decks containing only visible cards and one row'
-            TestUtil.createTestColumnsCollections(2)|1||true |'♤ 7     ♤ 6     ♤ 5     ♤ 4     ♤ 3     ♤ 2     ♥ A     '|'printing decks containing only visible cards and multiple rows'
-            TestUtil.createTestColumnsCollections(2)|9||false |'                                                        '|'printing decks containing only visible cards and multiple rows with non existing  index'
+            TestUtil.createTestColumnsCollections(1)|0||true|'♤ A     ♤ K     ♤ Q     ♤ J     ♤ 10    ♤ 9     ♤ 8     '|'printing decks containing only visible cards and one row'
+            TestUtil.createTestColumnsCollections(2)|1||true|'♤ 7     ♤ 6     ♤ 5     ♤ 4     ♤ 3     ♤ 2     ♥ A     '|'printing decks containing only visible cards and multiple rows'
+            TestUtil.createTestColumnsCollections(2)|9||false|'                                                        '|'printing decks containing only visible cards and multiple rows with non existing  index'
             TestUtil.setInvisiblecards(TestUtil.createTestColumnsCollections(1), 1)|0||true |'? ?     ? ?     ? ?     ? ?     ? ?     ? ?     ? ?     '|'printing decks containing only invisible cards and one row'
     }
 

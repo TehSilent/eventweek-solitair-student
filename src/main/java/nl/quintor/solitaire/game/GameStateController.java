@@ -1,6 +1,5 @@
 package nl.quintor.solitaire.game;
 
-import groovy.swing.factory.ColumnFactory;
 import nl.quintor.solitaire.models.card.Card;
 import nl.quintor.solitaire.models.card.Rank;
 import nl.quintor.solitaire.models.card.Suit;
