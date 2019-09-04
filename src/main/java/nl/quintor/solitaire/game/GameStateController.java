@@ -209,5 +209,15 @@ public class GameStateController {
      */
     public static void detectGameWin(GameState gameState){
         // TODO: Write implementation
+        Map<String, Deck> map = gameState.getColumns();
+        String[] arr = {"A","B","C","D","E","F","G"};
+        int totalInvisible = 0;
+        for(int i = 0; i < arr.length;i++){
+            totalInvisible += map.get(arr[i]).getInvisibleCards();
+        }
+
+        if(totalInvisible == 0 && gameState.getWaste().size() == 0 && gameState.getStock().size() == 0){
+            gameState.setGameWon(true);
+        }
     }
 }
