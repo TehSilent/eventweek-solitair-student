@@ -16,9 +16,9 @@ class DummyMoveSpec extends Specification {
             def ex = thrown(exception)
             ex.message == exceptionMessage
         where:
-        gameState | playerInput | exceptionMessage | exception
-        null |null | "Unknown move played: null" | MoveException
-        TestUtil.createGame(1L)|"ABC"|"Unknown move played: ABC"|MoveException
+        gameState               | playerInput   | exceptionMessage              | exception
+        null                    |null           | "Unknown move played: null"   | MoveException
+        TestUtil.createGame(1L) |"ABC"          |"Unknown move played: ABC"     |MoveException
     }
 
     def 'Dummy toString method should return "Dummy"' () {

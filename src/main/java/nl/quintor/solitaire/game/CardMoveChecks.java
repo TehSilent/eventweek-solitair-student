@@ -8,6 +8,9 @@ import nl.quintor.solitaire.models.card.Suit;
 import nl.quintor.solitaire.models.deck.Deck;
 import nl.quintor.solitaire.models.deck.DeckType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Library class for card move legality checks. The class is not instantiable, all constructors are private and all methods are
  * static. The class contains several private helper methods. All methods throw {@link MoveException}s, which can
@@ -30,11 +33,74 @@ public class CardMoveChecks {
      * @throws MoveException on syntax error
      */
     public static void checkPlayerInput(String[] input) throws MoveException{
-        if(input[1] == "Z"){
-            throw new MoveException("Invalid Move syntax. \"Z\" is not a valid source location.\nSee H̲elp for instructions.");
-        }else if(input[2] == "Z"){
-            throw new MoveException("Invalid Move syntax. \"Z\" is not a valid destination location.\nSee H̲elp for instructions.");
+        if (!isAllowedSource(input[1])){
+            throw new MoveException("Invalid Move syntax. \"" + input[1] + "\" is not a valid source location.\nSee H̲elp for instructions.");
         }
+
+        if(!isAllowedDestination(input[2])){
+            throw new MoveException("Invalid Move syntax. \"" + input[2] + "\" is not a valid destination location.\nSee H̲elp for instructions.");
+        }
+    }
+
+    /**
+     * Check whether an input is a valid source
+     * @param input string input
+     * @return will return true if valid and false if not
+     */
+    static boolean isAllowedSource(String input) throws MoveException{
+        //define stack and stock characters
+        String[] st = {"SA","SB","SC","SD"};
+        String stock = "O";
+
+        //define stack list for easy comparison
+        List<String> stacks = new ArrayList<>();
+        for(var s : st){
+            stacks.add(s);
+        }
+
+        boolean fine = false;
+
+        //define regex for columns
+        var regex = "[A-G][0-9]{1,2}";
+        if(input.matches(regex)){
+            fine = true;
+        }
+
+
+        //check if input is a stack?
+        if(stacks.contains(input)){
+            fine = true;
+        }
+
+        //check if the input is the stock
+        if(stock.contains(input)){
+            fine = true;
+
+        }
+
+        //return false bacuse its not a valid input
+        return fine;
+    }
+
+    static boolean isAllowedDestination(String input){
+        String[] co = {"A","B","C","D","E","F","G"};
+        String[] st = {"SA","SB","SC","SD"};
+
+        List<String> columns = new ArrayList<String>();
+        List<String> stacks = new ArrayList<>();
+
+        for (var c : co){
+            columns.add(c);
+        }
+
+        for (var s : st){
+            stacks.add(s);
+        }
+
+        if(columns.contains(input) || stacks.contains(input)){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -99,7 +165,9 @@ public class CardMoveChecks {
             if(targetDeck.size()==0){
                 checkColumnMove(null,cardToAdd);
             }else{
+
                 checkColumnMove(targetDeck.get(targetDeck.size()-1),cardToAdd);
+
             }
 
         }else{

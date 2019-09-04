@@ -53,7 +53,7 @@ class RevertMoveSpec extends Specification {
     def "Given a waste with one card cycle count is resetted and cards are back to waste" () {
         given:
         def gameState = TestUtil.createFixedNewGame()
-        gameState.stock.add(new Card(Suit.CLUBS, Rank.EIGHT))
+        //gameState.stock.add(new Card(Suit.CLUBS, Rank.EIGHT))
         new  CycleStock().createInstance("C").apply(gameState)
         new  CycleStock().createInstance("C").apply(gameState)
         assert gameState.moves.size() == 2
@@ -63,8 +63,8 @@ class RevertMoveSpec extends Specification {
         new Revert().createInstance("R").apply(gameState)
         then:
         with(gameState){
-            moves.size() == 1
-            stock[0] == new Card(Suit.CLUBS, Rank.EIGHT)
+            moves.size() == 1 //done
+            stock[0] == new Card(Suit.CLUBS, Rank.EIGHT) //done
             waste.size() == 0
             stockCycles == 0
         }

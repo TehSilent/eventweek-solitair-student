@@ -21,8 +21,11 @@ public class Revert implements Move {
      */
     @Override
     public String apply(GameState gameState) throws MoveException{
-        // TODO: Write implementation
-        return null;
+        if(gameState.getMoves() == null || gameState.getMoves().size() == 0) {
+            throw new MoveException("Cannot revert; no moves have been played.");
+        }
+        String ret = gameState.getMoves().get(gameState.getMoves().size()-1).revert(gameState);
+        return ret;
     }
 
     @Override

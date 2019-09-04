@@ -81,11 +81,11 @@ class CycleStockSpec extends Specification {
             assertThat(gameState.waste).containsSequence(resultingWaste.toArray())
             gameState.stockCycles == cycleCount
         where:
-        stock | waste | cyclingTimes | cycleCount | resultingStock | resultingWaste
-        [new Card(Suit.CLUBS, Rank.ACE)] as Deck | [] as Deck | 1 |1| [new Card(Suit.CLUBS, Rank.ACE)] as Deck | [] as Deck
-        [new Card(Suit.CLUBS, Rank.ACE)] as Deck | [new Card(Suit.CLUBS, Rank.TWO)] as Deck | 1 |0| [new Card(Suit.CLUBS, Rank.ACE), new Card(Suit.CLUBS, Rank.TWO)] as Deck| [] as Deck
-        [new Card(Suit.CLUBS, Rank.ACE), new Card(Suit.CLUBS, Rank.TWO)] as Deck | [] as Deck | 2 |1| [new Card(Suit.CLUBS, Rank.ACE), new Card(Suit.CLUBS, Rank.TWO)]as Deck | [] as Deck
-        [] as Deck | [new Card(Suit.CLUBS, Rank.ACE), new Card(Suit.CLUBS, Rank.TWO)] as Deck| 1 |0| [new Card(Suit.CLUBS, Rank.ACE)] as Deck| [new Card(Suit.CLUBS, Rank.TWO)] as Deck
+        stock                                                                           | waste                                                                         | cyclingTimes  | cycleCount    | resultingStock                                                            | resultingWaste
+        [new Card(Suit.CLUBS, Rank.ACE)] as Deck                                        | [] as Deck                                                                    | 1             | 1             | [new Card(Suit.CLUBS, Rank.ACE)] as Deck                                  | [] as Deck
+        [new Card(Suit.CLUBS, Rank.ACE)] as Deck                                        | [new Card(Suit.CLUBS, Rank.TWO)] as Deck                                      | 1             | 0             | [new Card(Suit.CLUBS, Rank.ACE), new Card(Suit.CLUBS, Rank.TWO)] as Deck  | [] as Deck
+        [new Card(Suit.CLUBS, Rank.ACE), new Card(Suit.CLUBS, Rank.TWO)] as Deck        | [] as Deck                                                                    | 2             | 1             | [new Card(Suit.CLUBS, Rank.ACE), new Card(Suit.CLUBS, Rank.TWO)] as Deck  | [] as Deck
+        [] as Deck                                                                      | [new Card(Suit.CLUBS, Rank.ACE), new Card(Suit.CLUBS, Rank.TWO)] as Deck      | 1             | 0             | [new Card(Suit.CLUBS, Rank.ACE)] as Deck                                  | [new Card(Suit.CLUBS, Rank.TWO)] as Deck
 
     }
 

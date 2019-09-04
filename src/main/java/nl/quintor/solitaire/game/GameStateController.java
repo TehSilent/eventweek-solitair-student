@@ -111,6 +111,7 @@ public class GameStateController {
                 c.add(card,allCards.get(cardIndex));
                 cardIndex++;
             }
+            c.setDeckType(DeckType.COLUMN);
             state.getColumns().put(a,c);
             column++;
         }
@@ -127,13 +128,10 @@ public class GameStateController {
         //Create stack
         String[] arrr = {"SA","SB","SC","SD"};
         for (var a: arrr ) {
-            state.getStackPiles().put(a,new Deck());
+            var deck = new Deck();
+            deck.setDeckType(DeckType.STACK);
+            state.getStackPiles().put(a,deck);
         }
-
-        for (var c : allCards ) {
-            state.getWaste().add(c);
-        }
-
 
         //return the state
         return state;
@@ -163,7 +161,6 @@ public class GameStateController {
      * @param gameState GameState object that the score penalty is applied to
      */
     public static void applyTimePenalty(GameState gameState){
-        // TODO: Write implementation
         LocalDateTime startTime = gameState.getStartTime();
         LocalDateTime endTime = gameState.getEndTime();
         Duration duration = Duration.between(startTime, endTime);
@@ -181,7 +178,6 @@ public class GameStateController {
      * @param gameState GameState object that the score penalty is applied to
      */
     public static void applyBonusScore(GameState gameState){
-        // TODO: Write implementation
         LocalDateTime startTime = gameState.getStartTime();
         LocalDateTime endTime = gameState.getEndTime();
         Duration duration = Duration.between(startTime, endTime);
@@ -208,7 +204,6 @@ public class GameStateController {
      * @param gameState GameState object of which it is determined if the game has been won
      */
     public static void detectGameWin(GameState gameState){
-        // TODO: Write implementation
         Map<String, Deck> map = gameState.getColumns();
         String[] arr = {"A","B","C","D","E","F","G"};
         int totalInvisible = 0;

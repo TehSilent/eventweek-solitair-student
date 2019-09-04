@@ -6,7 +6,7 @@ import nl.quintor.solitaire.models.state.GameState;
  * Class that represents a player action to quit the game.
  */
 public class Quit implements Move{
-    private final static String name = System.getProperty("os.name").contains("Windows") ? "Quit" : "Q̲uit";
+    private final static String name = System.getProperty("os.name").contains("Windows") ? "Q̲uit" : "Q̲uit";
 
     /**
      * Sets the {@link GameState#gameLost} boolean to true.
@@ -16,7 +16,7 @@ public class Quit implements Move{
      */
     @Override
     public String apply(GameState gameState){
-        // TODO: Write implementation
+        gameState.setGameLost(true);
         return "";
     }
 
@@ -27,7 +27,6 @@ public class Quit implements Move{
 
     @Override
     public String toString(){
-        // TODO: Write implementation
-        return null;
+        return name;
     }
 }

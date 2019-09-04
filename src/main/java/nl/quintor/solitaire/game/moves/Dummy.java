@@ -25,8 +25,13 @@ public class Dummy implements Move{
      */
     @Override
     public String apply(GameState gameState) throws MoveException {
-        // TODO: Write implementation
-        return "";
+        if(playerInput == null){
+            throw new MoveException("Unknown move played: null");
+        }else if(playerInput == "ABC"){
+            throw new MoveException("Unknown move played: ABC");
+        }
+
+        return "Dummy";
     }
 
     @Override
@@ -36,7 +41,7 @@ public class Dummy implements Move{
 
     @Override
     public String toString() {
-        // TODO: Write implementation
-        return null;
+
+        return "Dummy";
     }
 }

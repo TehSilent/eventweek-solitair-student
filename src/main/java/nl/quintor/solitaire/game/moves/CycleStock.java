@@ -9,7 +9,7 @@ import nl.quintor.solitaire.models.state.GameState;
  * revertible and influences the {@link GameState#baseScore}. It stores the previous score in case this move is reverted.
  */
 public class CycleStock implements RevertibleMove {
-    private final static String name = System.getProperty("os.name").contains("Windows") ? "Cycle stock" : "C̲ycle stock";
+    private final static String name = System.getProperty("os.name").contains("Windows") ? "Cycle stock" : "Cycle stock";
     private long previousScore = 0;
 
     @Override
@@ -32,13 +32,56 @@ public class CycleStock implements RevertibleMove {
      */
     @Override
     public String apply(GameState gameState) throws MoveException{
-        // TODO: Write implementation
-        return null;
+        if(gameState.getStock().size()==0 && gameState.getWaste().size()==0){
+            throw new MoveException("Stock is empty");
+        }
+
+        var stock = gameState.getStock();
+        var waste = gameState.getWaste();
+
+        if(gameState.getStock().size() > 1){
+            var card = stock.get(stock.size()-1);
+            waste.add(card);
+            stock.remove(card);
+            gameState.setStockCycles(gameState.getStockCycles()+1);
+
+        }else if(waste.size() == 0){
+            gameState.setStockCycles(gameState.getStockCycles()+1);
+
+        }else if(gameState.getStock().size() <= gameState.getWaste().size()){
+            var card = waste.get(0);
+            stock.add(card);
+            waste.remove(card);
+
+        }
+
+        gameState.getMoves().add(this);
+        return "Stock card " + stock.size() + " out of " + stock.size()+waste.size() + ", cycle " + gameState.getStockCycles();
     }
 
     @Override
     public String revert(GameState gameState){
-        // TODO: Write implementation
+        var stock = gameState.getStock();
+        var waste = gameState.getWaste();
+
+        if(gameState.getStock().size()-1 == gameState.getWaste().size()+1){
+
+            var card = stock.get(stock.size()-1);
+            waste.add(0,card);
+            stock.remove(card);
+
+        }else if(waste.size() == 0){
+            gameState.setStockCycles(gameState.getStockCycles()-1);
+        }else if(gameState.getStock().size()+1 > 1){
+
+            var card = waste.get(waste.size()-1);
+            waste.remove(card);
+            stock.add(card);
+
+            gameState.setStockCycles(gameState.getStockCycles()-1);
+
+        }
+        gameState.getMoves().remove(gameState.getMoves().size()-1);
         return "";
     }
 

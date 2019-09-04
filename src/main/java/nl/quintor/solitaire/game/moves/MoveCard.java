@@ -2,9 +2,13 @@ package nl.quintor.solitaire.game.moves;
 
 import nl.quintor.solitaire.game.CardMoveChecks;
 import nl.quintor.solitaire.game.moves.ex.MoveException;
+import nl.quintor.solitaire.models.card.Card;
 import nl.quintor.solitaire.models.deck.Deck;
 import nl.quintor.solitaire.models.deck.DeckType;
 import nl.quintor.solitaire.models.state.GameState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that represents a player action to move a card or multiple cards. This is an action that influences the
@@ -50,13 +54,98 @@ public class MoveCard implements RevertibleMove {
      */
     @Override
     public String apply(GameState gameState) throws MoveException {
-        // TODO: Write implementation
-        return null;
+        
+        CardMoveChecks.checkPlayerInput(playerInput.split(" "));
+
+        var regex = "[A-G][0-9]{1,2}";
+        String s = playerInput.split(" ")[1];
+        String d = playerInput.split(" ")[2];
+        String sourceType = "C";
+
+        Deck dSource = null;
+        Card cSource = null;
+
+        if(s.matches(regex)){
+            sourceType = "D";
+            dSource = gameState.getColumns().get(s.substring(0, 1));
+        }else{
+            //source is a stack or stock and also a card
+            if("O".contains(s)){
+                //source is the stock
+                var stock = gameState.getStock();
+                cSource = stock.get(stock.size()-1);
+                dSource = stock;
+
+            }else{
+                //source is a stack
+                var stack = gameState.getStackPiles().get(s);
+                cSource = stack.get(stack.size());
+                dSource = stack;
+            }
+        }
+
+        Deck destination = null;
+
+        //destination is column or stack
+
+        String[] co = {"A","B","C","D","E","F","G"};
+        List<String> columns = new ArrayList<String>();
+        for (var c : co){
+            columns.add(c);
+        }
+
+        if(columns.contains(d)){
+            //destination is a column
+            destination = gameState.getColumns().get(d);
+        }else{
+            //destination is a stack
+            destination = gameState.getStackPiles().get(d);
+        }
+
+        if(sourceType == "D"){
+            Integer cardIndex = Integer.parseInt(s.substring(1));
+
+            //throw new MoveException(destination.toString() + " " + dSource.toString());
+            CardMoveChecks.deckLevelChecks(dSource,cardIndex,destination);
+            Deck dec = new Deck();
+            for (int i = cardIndex; i < dSource.size(); i++){
+                dec.add(dSource.get(i));
+            }
+            movedCards = dec;
+        }else{
+            //throw new MoveException(destination.toString() + " " + cSource.toShortString());
+            CardMoveChecks.cardLevelChecks(destination,cSource);
+            Deck dec = new Deck();
+            dec.add(cSource);
+            movedCards = dec;
+        }
+
+        destinationDeck = destination;
+        sourceDeck = dSource;
+
+        for(var moved : movedCards){
+            destinationDeck.add(moved);
+            sourceDeck.remove(moved);
+        }
+
+        String ret = "Moved [";
+        ret += movedCards.get(0).toShortString();
+        ret+= "] from " + s + " to " + d;
+
+        gameState.getMoves().add(this);
+
+        return ret;
     }
 
     @Override
     public String revert(GameState gameState){
-        // TODO: Write implementation
+        gameState.getMoves().remove(this);
+
+        for (var move : movedCards){
+            destinationDeck.remove(move);
+            sourceDeck.add(move);
+        }
+
         return null;
     }
 
