@@ -3,6 +3,8 @@ package nl.quintor.solitaire.ui.cli;
 import nl.quintor.solitaire.models.deck.Deck;
 import nl.quintor.solitaire.models.state.GameState;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 /**
@@ -40,30 +42,56 @@ class GameStateParser {
      *  @return a visual representation of the gameState (for monospace terminal printing)
      */
     static String parseGameState(GameState gameState){
+        //TODO refactor
         StringBuilder builder = new StringBuilder();
 
-        // moves play time pointz
+        // moves play time points
         var moves = Integer.toString(gameState.getMoves().size());
-        var time = gameState.getEndTime();
-        var timeScore = Integer.toString(time.getHour()) + ":" + Integer.toString(time.getMinute()) + ":" + Integer.toString(time.getSecond());
+
+        if(gameState.getEndTime() == null){
+            gameState.setEndTime(LocalDateTime.now());
+        }
+
+        LocalDateTime startTime = gameState.getStartTime();
+        LocalDateTime endTime = gameState.getEndTime();
+        Duration duration = Duration.between(startTime, endTime);
+
+        long totalTime = duration.getSeconds();
+
+        String hours = Long.toString(totalTime/3600L);
+        if(hours.length() == 1){
+            hours = "0"+hours;
+        }
+
+        String minutes = Long.toString((totalTime/60L)%60L);
+        if(minutes.length() == 1){
+            minutes = "0"+minutes;
+        }
+
+        String seconds = Long.toString(totalTime%60L);
+        if(seconds.length() == 1){
+            seconds = "0"+seconds;
+        }
+
+        String timeScore = hours + ":" + minutes + ":" + seconds;
+
         var score = Long.toString(gameState.getScore());
 
-        builder.append(" " + moves + " moves played in " + timeScore + " for " + score + "points\n");
+        builder.append(moves + " move(s) played in " + timeScore + " for " + score + " points\n");
 
         //space
         builder.append("\n");
 
         //O and stack names
         padNAdd(builder,"",3);
-        padNAdd(builder,"O (" + Integer.toString(gameState.getWaste().size()) + ")",24);
+        padNAdd(builder,"O (" + Integer.toString(gameState.getWaste().size()+1) + ")",24);
         padNAdd(builder,"SA",8);
         padNAdd(builder,"SB",8);
         padNAdd(builder,"SC",8);
-        padNAdd(builder,"SD",2);
+        padNAdd(builder,"SD",8);
         builder.append("\n");
 
         //stock stacks
-
         padNAdd(builder,"",3);
         var stock = gameState.getStock();
         padNAdd(builder,getCardStringOrNull(stock,stock.size()-1),24);
@@ -81,7 +109,7 @@ class GameStateParser {
 
             }
 
-            padNAdd(builder,cardString,stack==stacks.size()-1?2:8);
+            padNAdd(builder,cardString,8);
 
         }
         builder.append("\n");
